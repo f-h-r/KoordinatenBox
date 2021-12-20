@@ -1,0 +1,41 @@
+
+Menüstruktur und Anzeige
+========================
+
+Ebene:
+ucMenuLevel = 0
+|-- ucMenuLevel = 1
+|---- ucMenuLevel = 2
+
+Wert:
+ucDataToShow
+|   ucSettingsItem
+|   |
+v   v
+
+0 aktiver Nullpunkt (Anzeige NP)
+|-- 0 Nullpunkt wählen
+|-- 1 Nullpunkt speichern
+|-- 2 Abbrechen
+1 Mitte tasten (Inaktiv, Punkt 1, Punkt 2, Fertig)
+|-- 0 Durchmesser Werkzeug
+|-- 1 Start
+|-- 2 Abbrechen
+2 Muster linear (Inaktiv, Nr. Aktuell/Gesamt, Fertig)
+|-- 0 Länge X
+|-- 1 Anzahl X
+|-- 2 Länge Y
+|-- 3 Anzahl Y
+|-- 4 Start
+|-- 5 Abbrechen
+3 Muster Kreis (Inaktiv, Nr. Aktuell/Gesamt, Fertig)
+|-- 0 Radius
+|-- 1 Anzahl Punkte
+|-- 2 Versatz in Grad
+|-- 3 Start
+|-- 4 Abbrechen
+4 Einstellungen
+|-- 0 Helligkeit
+|-- 1 Modus Achse
+|-- 2 Nullen Achse
+|-- 3 Zurück
