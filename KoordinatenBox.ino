@@ -98,6 +98,13 @@ void setup(void)
     digitalWrite(AXIS_LED_Z, HIGH);
     tScaleZ.ucIsRelative = 1;
   }
+
+  // Scale factors
+  for (unsigned int t = 0; t < sizeof(tScaleX.fScaleFactorVal); t++) *((char*)&tScaleX.fScaleFactorVal + t) = EEPROM.read(EE_SCALEVAL_X + t);
+  for (unsigned int t = 0; t < sizeof(tScaleY.fScaleFactorVal); t++) *((char*)&tScaleY.fScaleFactorVal + t) = EEPROM.read(EE_SCALEVAL_Y + t);
+  for (unsigned int t = 0; t < sizeof(tScaleZ.fScaleFactorVal); t++) *((char*)&tScaleZ.fScaleFactorVal + t) = EEPROM.read(EE_SCALEVAL_Z + t);
+
+
   DBG_P(F("Done\n"));
 
   // Enable Maxim MAX7219

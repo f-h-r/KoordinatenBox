@@ -22,8 +22,9 @@ void _serial_handle()
       {
         tScaleX.iByteCounter = 0;
         tScaleX.fRealVal = (float)tScaleX.ufValue.lVal / 100;
-        tScaleX.fRealVal = tScaleX.fRealVal * 1.0008;
+        //tScaleX.fRealVal = tScaleX.fRealVal * tScaleX.fScaleFactorVal;  // Scale factor
         tScaleX.fVal = tScaleX.fRealVal - tScaleX.fVirtualZeroVal;
+        tScaleX.fVal *= tScaleX.fScaleFactorVal;  // Scale factor
         tScaleX.ucNewData = 1;
       }
     }
@@ -50,8 +51,9 @@ void _serial_handle()
       {
         tScaleY.iByteCounter = 0;
         tScaleY.fRealVal = (float)tScaleY.ufValue.lVal / 100;
-        tScaleY.fRealVal = tScaleY.fRealVal * 0.9989;
+        //tScaleY.fRealVal = tScaleY.fRealVal * tScaleY.fScaleFactorVal;  // Scale factor
         tScaleY.fVal = tScaleY.fRealVal - tScaleY.fVirtualZeroVal;
+        tScaleY.fVal *= tScaleY.fScaleFactorVal;  // Scale factor
         tScaleY.ucNewData = 1;
       }
     }
@@ -78,7 +80,9 @@ void _serial_handle()
       {
         tScaleZ.iByteCounter = 0;
         tScaleZ.fRealVal = (float)tScaleZ.ufValue.lVal / 100;
+        //tScaleZ.fRealVal = tScaleZ.fRealVal * tScaleZ.fScaleFactorVal;  // Scale factor
         tScaleZ.fVal = tScaleZ.fRealVal - tScaleZ.fVirtualZeroVal;
+        tScaleZ.fVal *= tScaleZ.fScaleFactorVal;  // Scale factor
         tScaleZ.ucNewData = 1;
       }
     }

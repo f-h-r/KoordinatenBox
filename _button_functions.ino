@@ -271,7 +271,7 @@ void _button_handle()
           case 4: // Setup
             switch (ucSettingsItem)
             {
-              case 3: // back
+              case 6: // back
                 ucMenuLevel = 0; // back to status
                 ucSettingsItem = 0;
                 ucDataToShow = 0;
@@ -406,6 +406,15 @@ void _button_handle()
                   default:
                     break;
                 }
+                break;
+              case 3: // 3 save scale factor X
+                for (unsigned int t = 0; t < sizeof(tScaleX.fScaleFactorVal); t++) EEPROM.write(EE_SCALEVAL_X + t, *((char*)&tScaleX.fScaleFactorVal + t));
+                break;
+              case 4: // 4 save scale factor Y
+                for (unsigned int t = 0; t < sizeof(tScaleY.fScaleFactorVal); t++) EEPROM.write(EE_SCALEVAL_Y + t, *((char*)&tScaleY.fScaleFactorVal + t));
+                break;
+              case 5: // 5 save scale factor Z
+                for (unsigned int t = 0; t < sizeof(tScaleZ.fScaleFactorVal); t++) EEPROM.write(EE_SCALEVAL_Z + t, *((char*)&tScaleZ.fScaleFactorVal + t));
                 break;
               default:
                 break;
@@ -699,7 +708,7 @@ void _encoder_handle()
               ucSettingsItem < 4 ? ucSettingsItem++ : ucSettingsItem = 0;
               break;
             case 4: // Setup
-              ucSettingsItem < 3 ? ucSettingsItem++ : ucSettingsItem = 0;
+              ucSettingsItem < 6 ? ucSettingsItem++ : ucSettingsItem = 0;
               break;
             default:
               break;
@@ -782,6 +791,15 @@ void _encoder_handle()
                   case 2:
                     ucSelectedAxis < 2 ? ucSelectedAxis++ : ucSelectedAxis = 0;
                     break;
+                  case 3:
+                    tScaleX.fScaleFactorVal < 1.0049 ? tScaleX.fScaleFactorVal += 0.0001 : tScaleX.fScaleFactorVal = 1.005;
+                    break;
+                  case 4:
+                    tScaleY.fScaleFactorVal < 1.0049 ? tScaleY.fScaleFactorVal += 0.0001 : tScaleY.fScaleFactorVal = 1.005;
+                    break;
+                  case 5:
+                    tScaleZ.fScaleFactorVal < 1.0049 ? tScaleZ.fScaleFactorVal += 0.0001 : tScaleZ.fScaleFactorVal = 1.005;
+                    break;
                   default:
                     break;
                 }
@@ -823,7 +841,7 @@ void _encoder_handle()
               ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 4;
               break;
             case 4: // Setup
-              ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 3;
+              ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 6;
               break;
             default:
               break;
@@ -906,6 +924,15 @@ void _encoder_handle()
                   case 1:
                   case 2:
                     ucSelectedAxis > 0 ? ucSelectedAxis-- : ucSelectedAxis = 2;
+                    break;
+                  case 3:
+                    tScaleX.fScaleFactorVal > 0.995 ? tScaleX.fScaleFactorVal -= 0.0001 : tScaleX.fScaleFactorVal = 0.995;
+                    break;
+                  case 4:
+                    tScaleY.fScaleFactorVal > 0.995 ? tScaleY.fScaleFactorVal -= 0.0001 : tScaleY.fScaleFactorVal = 0.995;
+                    break;
+                  case 5:
+                    tScaleZ.fScaleFactorVal > 0.995 ? tScaleZ.fScaleFactorVal -= 0.0001 : tScaleZ.fScaleFactorVal = 0.995;
                     break;
                   default:
                     break;

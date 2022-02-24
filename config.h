@@ -47,6 +47,7 @@ volatile unsigned char ucTimerInterruptMask = 0; // Interruptable Char for stori
 //      3   7
 //
 
+
 // the pins where the chip select is connected to
 #define CS1 47 // First display (top) - X-Axis
 #define CS2 45 // Second display - Y-Axis
@@ -145,6 +146,9 @@ unsigned char ucSelectedAxis = 0; // Selected axis (0=X, 1=Y, 2=Z)
 #define EE_VZEROVAL_Z 22  // starting address in EEPROM for virtual zero value for x-axis (4 byte size)
 #define EE_ZEROPOINT 26  // starting address in EEPROM for selected zero point (1 byte size)
 #define EE_ZP_TABLE 40  // starting address in EEPROM for zero point arrays table (3x float (4 byte) per axis (12 byte) x 10 entries = 120 byte size)
+#define EE_SCALEVAL_X 180  // starting address in EEPROM for scale factor value for x-axis (4 byte size)
+#define EE_SCALEVAL_Y 184  // starting address in EEPROM for virtual zero value for y-axis (4 byte size)
+#define EE_SCALEVAL_Z 188  // starting address in EEPROM for virtual zero value for z-axis (4 byte size)
 
 volatile unsigned char ucEepromConfig = 0; // variable to hold bit fields for EE_CONFIG
 #define BF_REL_X 0 // bit state in ucEepromConfig (EE_CONFIG)
@@ -178,6 +182,7 @@ struct scale_t
   int iByteCounter; // incoming byte counter
   int iInByte; // incoming serial byte
   unsigned char ucNewData; // Indicates new (1) position
+  float fScaleFactorVal; // contains scale factor value
 };
 
 // Zero point to select
@@ -185,9 +190,9 @@ struct scale_t
 unsigned char ucZeroPoint = 0; // Selected zero point (0 .. MAX_NO_OF_ZERO_POINTS)
 
 // Set up scales
-scale_t tScaleX = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0};
-scale_t tScaleY = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0};
-scale_t tScaleZ = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0};
+scale_t tScaleX = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 1.0};
+scale_t tScaleY = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 1.0};
+scale_t tScaleZ = {0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 1.0};
 
 
 // Function definitions

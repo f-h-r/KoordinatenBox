@@ -8,6 +8,7 @@ void _display_data(unsigned char ucScreenNo)
 {
   unsigned int uiTmpCur = 0;
   unsigned int uiTmpCount = 0;
+  unsigned int uiTmp = 0;
 
   lcDispMM.clearMatrix();
   lcDispSM.clearMatrix();
@@ -308,6 +309,7 @@ void _display_setting(unsigned char ucSettingNo)
 {
 
   unsigned int uiTmpCount = 0;
+  unsigned int uiTmp = 0;
 
   lcDispMM.clearMatrix();
   lcDispSM.clearMatrix();
@@ -652,7 +654,80 @@ void _display_setting(unsigned char ucSettingNo)
               break;
           }
           break;
-        case 3: // back
+
+        case 3: // scale factor x
+          lcDispMM.setChar(0, 5, 's', false);
+          lcDispMM.setChar(0, 4, 'k', false);
+          lcDispMM.setChar(0, 3, 'a', false);
+          lcDispMM.setChar(0, 2, 'l', false);
+          lcDispMM.setChar(0, 0, 'x', false);
+
+          // summarize current and final number of iterations
+          uiTmp = tScaleX.fScaleFactorVal * 10000.0;
+
+          if (uiTmp >= 10000)
+          {
+            lcDispSM.setRow(0, 4, B10110000); // one with dot
+          }
+          else
+          {
+            lcDispSM.setRow(0, 4, B11111110); // zero with dot
+          }
+          lcDispSM.setDigit(0, 0, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 1, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 2, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 3, uiTmp % 10, false); uiTmp /= 10;
+          break;
+
+        case 4: // scale factor y
+          lcDispMM.setChar(0, 5, 's', false);
+          lcDispMM.setChar(0, 4, 'k', false);
+          lcDispMM.setChar(0, 3, 'a', false);
+          lcDispMM.setChar(0, 2, 'l', false);
+          lcDispMM.setChar(0, 0, 'y', false);
+
+          // summarize current and final number of iterations
+          uiTmp = tScaleY.fScaleFactorVal * 10000.0;
+
+          if (uiTmp >= 10000)
+          {
+            lcDispSM.setRow(0, 4, B10110000); // one with dot
+          }
+          else
+          {
+            lcDispSM.setRow(0, 4, B11111110); // zero with dot
+          }
+          lcDispSM.setDigit(0, 0, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 1, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 2, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 3, uiTmp % 10, false); uiTmp /= 10;
+          break;
+
+        case 5: // scale factor z
+          lcDispMM.setChar(0, 5, 's', false);
+          lcDispMM.setChar(0, 4, 'k', false);
+          lcDispMM.setChar(0, 3, 'a', false);
+          lcDispMM.setChar(0, 2, 'l', false);
+          lcDispMM.setChar(0, 0, 'z', false);
+
+          // summarize current and final number of iterations
+          uiTmp = tScaleZ.fScaleFactorVal * 10000.0;
+
+          if (uiTmp >= 10000)
+          {
+            lcDispSM.setRow(0, 4, B10110000); // one with dot
+          }
+          else
+          {
+            lcDispSM.setRow(0, 4, B11111110); // zero with dot
+          }
+          lcDispSM.setDigit(0, 0, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 1, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 2, uiTmp % 10, false); uiTmp /= 10;
+          lcDispSM.setDigit(0, 3, uiTmp % 10, false); uiTmp /= 10;
+          break;
+
+        case 6: // back
           lcDispMM.setChar(0, 5, 'a', false);
           lcDispMM.setChar(0, 4, 'b', false);
           lcDispMM.setChar(0, 3, 'b', false);
