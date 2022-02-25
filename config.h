@@ -30,10 +30,7 @@
 // Timer-Interrupt-specific, Bitmasks
 #define TIMER_INT_US 200000 // Triggers every x us
 #define TIMER_UPDATE 0 // Toggle-Bit in ucTimerInterruptMask signalling update
-//#define TIMER_MAX_VAR_INTVL 600 // maximum interval for variable timer in seconds
 volatile unsigned char ucTimerInterruptMask = 0; // Interruptable Char for storing bit masks and counters
-//volatile unsigned char ucTimerExecutionCounter = 1; // Interruptable counter for tasks to be executed after n timer ticks
-//unsigned int uiVariableTimerInterval = 10; // variable interval in seconds
 
 // LEDController / Maxim MAX7219 specific
 // 7-Segment Layout - Bits 0-7

@@ -43,11 +43,3 @@ v   v
 |-- 5 Skalierungsfaktor Achse Z
 |-- 6 Zurück
 
-
-#define EE_SCALEVAL_X 180  // starting address in EEPROM for scale factor value for x-axis (4 byte size)
-#define EE_SCALEVAL_Y 184  // starting address in EEPROM for virtual zero value for y-axis (4 byte size)
-#define EE_SCALEVAL_Z 188  // starting address in EEPROM for virtual zero value for z-axis (4 byte size)
-
-tScaleX.fScaleFactorVal 
-tScaleY.fScaleFactorVal 
-tScaleZ.fScaleFactorVal 

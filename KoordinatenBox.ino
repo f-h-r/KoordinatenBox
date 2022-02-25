@@ -177,9 +177,6 @@ void loop()
         break;
     }
 
-    // Execute actions in variable timer intervals
-    // if ((ucTimerExecutionCounter % uiVariableTimerInterval == 0)) {}
-
     // reset timer flag
     bitClear(ucTimerInterruptMask, TIMER_UPDATE);
   }

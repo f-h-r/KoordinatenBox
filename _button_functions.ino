@@ -228,7 +228,16 @@ void _button_handle()
                 ucSettingsItem = 0;
                 ucDataToShow = 2;
                 tLinP.ucState = 0; // State of function (0=inactive, 1=running, 2=finished)
+                tLinP.uiCurrentNo = 0;
                 ucActionActive = 0; // disable animation
+                // disable relative mode on X
+                digitalWrite(AXIS_LED_X, LOW);
+                tScaleX.ucIsRelative = 0;
+                tScaleX.fRelativeVal = 0.0;
+                // disable relative mode on Y
+                digitalWrite(AXIS_LED_Y, LOW);
+                tScaleY.ucIsRelative = 0;
+                tScaleY.fRelativeVal = 0.0;
                 _display_data(ucDataToShow);
                 break;
               default:
@@ -259,7 +268,17 @@ void _button_handle()
                 ucSettingsItem = 0;
                 ucDataToShow = 3;
                 tCirP.ucState = 0; // State of function (0=inactive, 1=running, 2=finished)
+                tCirP.uiCurrent = 0;
                 ucActionActive = 0; // disable animation
+
+                // disable relative mode on X
+                digitalWrite(AXIS_LED_X, LOW);
+                tScaleX.ucIsRelative = 0;
+                tScaleX.fRelativeVal = 0.0;
+                // disable relative mode on Y
+                digitalWrite(AXIS_LED_Y, LOW);
+                tScaleY.ucIsRelative = 0;
+                tScaleY.fRelativeVal = 0.0;
                 _display_data(ucDataToShow);
                 break;
               default:
@@ -468,9 +487,6 @@ void _button_handle()
                     break;
                   case 3: // Second measurement Y, last cycle, claculate and show values
                     tCoP.fSecondYVal = tScaleY.fVal; // save second value Y
-                    // tScaleX.fRelativeVal = tCoP.fFirstXVal - (tCoP.fSecondXVal / 2) - (tCoP.fToolDia / 2); // calculate center of X with tool
-                    // tScaleY.fRelativeVal = tCoP.fFirstYVal - (tCoP.fSecondYVal / 2) - (tCoP.fToolDia / 2); // calculate center of Y with tool
-
                     tScaleX.fRelativeVal = (tCoP.fFirstXVal + tCoP.fSecondXVal) / 2; // calculate X
                     tScaleY.fRelativeVal = (tCoP.fFirstYVal + tCoP.fSecondYVal) / 2; // calculate Y
 
@@ -547,7 +563,11 @@ void _button_handle()
                     }
                     else // last iteration
                     {
-                      tLinP.ucState = 2; // finish linear pattern function
+                      // start over
+                      tLinP.uiCurrentX = 0;
+                      tLinP.uiCurrentY = 0;
+
+                      //tLinP.ucState = 2; // finish linear pattern function
                     }
 
                     tScaleX.fRelativeVal = tLinP.fStartPtX + (tLinP.uiCurrentX * tLinP.fLengthX); // calculate X position
@@ -557,7 +577,8 @@ void _button_handle()
                     break;
                 }
                 break;
-              case 2: // 2=finished
+              /*
+                case 2: // 2=finished
                 ucMenuLevel = 0; // back to status
                 ucSettingsItem = 0;
                 ucDataToShow = 2;
@@ -574,6 +595,7 @@ void _button_handle()
                 tScaleY.ucIsRelative = 0;
                 tScaleY.fRelativeVal = 0.0;
                 break;
+              */
               default:
                 break;
             }
@@ -615,7 +637,8 @@ void _button_handle()
                     }
                     else // last iteration
                     {
-                      tCirP.ucState = 2; // finish linear pattern function
+                      tCirP.uiCurrent = 1; // repeat cycle
+                      //tCirP.ucState = 2; // finish linear pattern function
                     }
 
                     fTempDeg2Rad = (tCirP.fCurrentAngle + tCirP.fAngleOffset) / 360 * 2 * M_PI; // convert degree to radiants
@@ -626,7 +649,8 @@ void _button_handle()
                     break;
                 }
                 break;
-              case 2: // 2=finished
+              /*
+                case 2: // 2=finished
                 ucMenuLevel = 0; // back to status
                 ucSettingsItem = 0;
                 ucDataToShow = 3;
@@ -643,6 +667,7 @@ void _button_handle()
                 tScaleY.ucIsRelative = 0;
                 tScaleY.fRelativeVal = 0.0;
                 break;
+              */
               default:
                 break;
             }

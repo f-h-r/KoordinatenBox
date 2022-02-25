@@ -178,7 +178,8 @@ void _display_data(unsigned char ucScreenNo)
             lcDispSM.setDigit(0, 2, uiTmpCount % 10, false); uiTmpCount /= 10;
           }
           break;
-        case 2: // finished
+        /*
+          case 2: // finished
           lcDispSM.setChar(0, 6, 'f', false);
           lcDispSM.setChar(0, 5, 'e', false);
           lcDispSM.setChar(0, 4, 'r', false);
@@ -186,6 +187,7 @@ void _display_data(unsigned char ucScreenNo)
           lcDispSM.setChar(0, 2, 'i', false);
           lcDispSM.setChar(0, 1, 'g', false);
           break;
+        */
         default:
           break;
       }
@@ -251,7 +253,8 @@ void _display_data(unsigned char ucScreenNo)
             lcDispSM.setDigit(0, 2, uiTmpCount % 10, false); uiTmpCount /= 10;
           }
           break;
-        case 2: // finished
+        /*
+          case 2: // finished
           lcDispSM.setChar(0, 6, 'f', false);
           lcDispSM.setChar(0, 5, 'e', false);
           lcDispSM.setChar(0, 4, 'r', false);
@@ -259,6 +262,7 @@ void _display_data(unsigned char ucScreenNo)
           lcDispSM.setChar(0, 2, 'i', false);
           lcDispSM.setChar(0, 1, 'g', false);
           break;
+        */
         default:
           break;
       }

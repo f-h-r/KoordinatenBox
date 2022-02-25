@@ -28,9 +28,6 @@ void _isr_init()
 /**************************************************************************/
 void _isr_timer()
 {
-  // increase ucTimerExecutionCounter from 1 to uiVariableTimerInterval and restart after
-  //ucTimerExecutionCounter > uiVariableTimerInterval ? ucTimerExecutionCounter = 1 : ucTimerExecutionCounter++;
-
   // Set bits
   bitSet(ucTimerInterruptMask, TIMER_UPDATE);
 }
