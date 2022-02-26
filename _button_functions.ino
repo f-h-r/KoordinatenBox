@@ -559,11 +559,12 @@ void _button_handle()
                       {
                         tLinP.uiCurrentY++; // next row
                         tLinP.uiCurrentX = 0; // start column from beginning
-                      }
+                     }
                     }
                     else // last iteration
                     {
                       // start over
+                      tLinP.uiCurrentNo = 0; // set to next iteration
                       tLinP.uiCurrentX = 0;
                       tLinP.uiCurrentY = 0;
 
@@ -617,10 +618,8 @@ void _button_handle()
 
                     // first pattern starts at 0° position plus offset
                     tCirP.fCurrentAngle = 0.0;
-                    fTempDeg2Rad = (tCirP.fCurrentAngle + tCirP.fAngleOffset) / 360 * 2 * M_PI; // convert degree to radiants
-                    tScaleX.fRelativeVal = tCirP.fStartPtX + (tCirP.fRadius * cos(fTempDeg2Rad)); // calculate X position
-                    tScaleY.fRelativeVal = tCirP.fStartPtY + (tCirP.fRadius * sin(fTempDeg2Rad)); // calculate Y position
-
+                    tCirP.uiCurrent = 0; 
+                    
                     // enable relative mode on X
                     digitalWrite(AXIS_LED_X, HIGH);
                     tScaleX.ucIsRelative = 1;
@@ -628,8 +627,6 @@ void _button_handle()
                     digitalWrite(AXIS_LED_Y, HIGH);
                     tScaleY.ucIsRelative = 1;
 
-                    tCirP.uiCurrent = 1; // set to next iteration
-                    break;
                   default: // all other iterations
                     if (tCirP.uiCurrent < tCirP.uiCount) // running
                     {
@@ -637,7 +634,8 @@ void _button_handle()
                     }
                     else // last iteration
                     {
-                      tCirP.uiCurrent = 1; // repeat cycle
+                      tCirP.uiCurrent = 0; // repeat cycle
+                      tCirP.fCurrentAngle = 0.0; // set current angle to first position
                       //tCirP.ucState = 2; // finish linear pattern function
                     }
 
