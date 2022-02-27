@@ -26,8 +26,9 @@ v   v
 |-- 1 Anzahl X
 |-- 2 Länge Y
 |-- 3 Anzahl Y
-|-- 4 Start
-|-- 5 Abbrechen
+|-- 4 Winkel zu X
+|-- 5 Start
+|-- 6 Abbrechen
 3 Muster Kreis (Inaktiv, Nr. Aktuell/Gesamt, Fertig)
 |-- 0 Radius
 |-- 1 Anzahl Punkte

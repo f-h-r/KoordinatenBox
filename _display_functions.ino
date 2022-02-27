@@ -479,7 +479,18 @@ void _display_setting(unsigned char ucSettingNo)
           lcDispSM.setDigit(0, 1, uiTmpCount % 10, false); uiTmpCount /= 10;
           lcDispSM.setDigit(0, 2, uiTmpCount % 10, false); uiTmpCount /= 10;
           break;
-        case 4: // run
+        case 4: // Angle
+          lcDispMM.setChar(0, 5, 'w', false);
+          lcDispMM.setChar(0, 4, 'i', false);
+          lcDispMM.setChar(0, 3, 'n', false);
+          lcDispMM.setChar(0, 2, 'k', false);
+          lcDispMM.setChar(0, 1, 'e', false);
+          lcDispMM.setChar(0, 0, 'l', false);
+
+           _display_float(&lcDispSM, tLinP.fLineAngle, 2);
+          lcDispSM.setRow(0, 6, B01100011); // degree symbol
+          break;
+        case 5: // run
           if (tLinP.ucState == 0) // State of function
           {
             lcDispMM.setChar(0, 5, 's', false);
@@ -498,7 +509,7 @@ void _display_setting(unsigned char ucSettingNo)
             lcDispMM.setChar(0, 0, 'z', false);
           }
           break;
-        case 5: // stop
+        case 6: // stop
           lcDispMM.setChar(0, 5, 'a', false);
           lcDispMM.setChar(0, 4, 'b', false);
           lcDispMM.setChar(0, 3, 'b', false);
@@ -809,15 +820,15 @@ void _display_float(LedController<1, 1> *lc, float fValue, unsigned int uiDecPla
   {
     uiTotalLength = 7;
     // remove leading zeroes
-    if (fValue > -1000) uiTotalLength = 6;
-    if (fValue > -100) uiTotalLength = 5;
-    if (fValue > -10) uiTotalLength = 4;
+    if (fValue > -1000) uiTotalLength = 4 + uiDecPlaces;
+    if (fValue > -100) uiTotalLength = 3 + uiDecPlaces;
+    if (fValue > -10) uiTotalLength = 2 + uiDecPlaces;
   }
   else
   {
-    if (fValue < 1000) uiTotalLength = 5;
-    if (fValue < 100) uiTotalLength = 4;
-    if (fValue < 10) uiTotalLength = 3;
+    if (fValue < 1000) uiTotalLength = 3 + uiDecPlaces;
+    if (fValue < 100) uiTotalLength = 2 + uiDecPlaces;
+    if (fValue < 10) uiTotalLength = 1 + uiDecPlaces;
   }
 
   // clear unneeded digits
@@ -834,7 +845,7 @@ void _display_float(LedController<1, 1> *lc, float fValue, unsigned int uiDecPla
   for (unsigned int uiTemp = 0; uiTemp < uiDecPlaces; uiTemp++) fValue *= 10.0f;
 
   // print value digit per digit
-  unsigned int uiValue = (unsigned int) (fValue < 0 ? -fValue : fValue);
+  unsigned int uiValue = roundf(fValue < 0 ? -fValue : fValue);
   for (unsigned int uiTemp = 0; uiTemp < uiTotalLength; uiTemp++)
   {
     lc->setDigit(0, uiTemp, uiValue % 10, uiTemp == uiDecPlaces);

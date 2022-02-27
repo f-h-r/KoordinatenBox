@@ -209,7 +209,7 @@ void _button_handle()
           case 2: // linear pattern (X and Y)
             switch (ucSettingsItem)
             {
-              case 4: // run
+              case 5: // run
                 if (ucActionActive < 2)  // (Only if no running action)
                 {
                   if (tScaleX.ucIsRelative == 0 && tScaleY.ucIsRelative == 0 ) // Only if relative mode is off
@@ -223,7 +223,7 @@ void _button_handle()
                 ucDataToShow = 2;
                 _display_data(ucDataToShow);
                 break;
-              case 5: // stop
+              case 6: // stop
                 ucMenuLevel = 0; // back to status
                 ucSettingsItem = 0;
                 ucDataToShow = 2;
@@ -362,9 +362,11 @@ void _button_handle()
                 break;
               case 3: // count Y
                 break;
-              case 4: // run
+              case 4: // shift degree
                 break;
-              case 5: // stop
+              case 5: // run
+                break;
+              case 6: // stop
                 break;
               default:
                 break;
@@ -546,6 +548,9 @@ void _button_handle()
                     digitalWrite(AXIS_LED_Y, HIGH);
                     tScaleY.ucIsRelative = 1;
 
+                    DBG_P(F("X-Wert: ")); DBG_P(tScaleX.fRelativeVal); DBG_P(F("\n"));
+                    DBG_P(F("Y-Wert: ")); DBG_P(tScaleY.fRelativeVal); DBG_P(F("\n"));
+
                     tLinP.uiCurrentNo = 1; // set to next iteration
                     break;
                   default: // all other iterations
@@ -571,9 +576,9 @@ void _button_handle()
                       //tLinP.ucState = 2; // finish linear pattern function
                     }
 
-                    tScaleX.fRelativeVal = tLinP.fStartPtX + (tLinP.uiCurrentX * tLinP.fLengthX); // calculate X position
-                    tScaleY.fRelativeVal = tLinP.fStartPtY + (tLinP.uiCurrentY * tLinP.fLengthY); // calculate Y position
-
+                    tScaleX.fRelativeVal = tLinP.fStartPtX + (tLinP.uiCurrentX * tLinP.fLengthX * cos(Deg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * cos(Deg2Rad(tLinP.fLineAngle + 90))); // calculate X position
+                    tScaleY.fRelativeVal = tLinP.fStartPtY + (tLinP.uiCurrentX * tLinP.fLengthX * sin(Deg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * sin(Deg2Rad(tLinP.fLineAngle + 90))); // calculate Y position
+                   
                     tLinP.uiCurrentNo++; // set to next iteration
                     break;
                 }
@@ -639,9 +644,8 @@ void _button_handle()
                       //tCirP.ucState = 2; // finish linear pattern function
                     }
 
-                    fTempDeg2Rad = (tCirP.fCurrentAngle + tCirP.fAngleOffset) / 360 * 2 * M_PI; // convert degree to radiants
-                    tScaleX.fRelativeVal = tCirP.fStartPtX + (tCirP.fRadius * cos(fTempDeg2Rad)); // calculate X position
-                    tScaleY.fRelativeVal = tCirP.fStartPtY + (tCirP.fRadius * sin(fTempDeg2Rad)); // calculate Y position
+                    tScaleX.fRelativeVal = tCirP.fStartPtX + (tCirP.fRadius * cos(Deg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate X position
+                    tScaleY.fRelativeVal = tCirP.fStartPtY + (tCirP.fRadius * sin(Deg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate Y position
 
                     tCirP.uiCurrent++; // set to next iteration
                     break;
@@ -725,7 +729,7 @@ void _encoder_handle()
               ucSettingsItem < 2 ? ucSettingsItem++ : ucSettingsItem = 0;
               break;
             case 2: // linear pattern (X and Y)
-              ucSettingsItem < 5 ? ucSettingsItem++ : ucSettingsItem = 0;
+              ucSettingsItem < 6 ? ucSettingsItem++ : ucSettingsItem = 0;
               break;
             case 3: // circular pattern
               ucSettingsItem < 4 ? ucSettingsItem++ : ucSettingsItem = 0;
@@ -778,6 +782,11 @@ void _encoder_handle()
                   case 3: // Iterations Y
                     if (tLinP.uiCountY < 100) tLinP.uiCountY += 1;
                     break;
+                  case 4: // Angle
+                    if (tLinP.fLineAngle < 89.01) tLinP.fLineAngle += 1;
+                    if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    break;
                   default:
                     break;
                 }
@@ -792,7 +801,8 @@ void _encoder_handle()
                     if (tCirP.uiCount < 100) tCirP.uiCount += 1;
                     break;
                   case 2: // Angle offset
-                    if (tCirP.fAngleOffset < 500.0) tCirP.fAngleOffset += 1.0;
+                    if (tCirP.fAngleOffset < 119.01) tCirP.fAngleOffset += 1.0;
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -858,7 +868,7 @@ void _encoder_handle()
               ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 2;
               break;
             case 2: // linear pattern (X and Y)
-              ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 5;
+              ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 6;
               break;
             case 3: // circular pattern
               ucSettingsItem > 0 ? ucSettingsItem-- : ucSettingsItem = 4;
@@ -911,6 +921,11 @@ void _encoder_handle()
                   case 3: // Iterations Y
                     if (tLinP.uiCountY > 1) tLinP.uiCountY -= 1;
                     break;
+                  case 4: // Angle
+                    if (tLinP.fLineAngle > -89.01) tLinP.fLineAngle -= 1;
+                    if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    break;
                   default:
                     break;
                 }
@@ -925,7 +940,9 @@ void _encoder_handle()
                     if (tCirP.uiCount > 1) tCirP.uiCount -= 1;
                     break;
                   case 2: // Angle offset
-                    if (tCirP.fAngleOffset > 1.1) tCirP.fAngleOffset -= 1.0;
+                    if (tCirP.fAngleOffset > 0.99) tCirP.fAngleOffset -= 1.0;
+                    if (tCirP.fAngleOffset < 0.01) tCirP.fAngleOffset = 0.0;
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1000,6 +1017,11 @@ void _encoder_handle()
                   case 2: // Length Y
                     if (tLinP.fLengthY < 500.0) tLinP.fLengthY += 0.01;
                     break;
+                  case 4: // Angle
+                    if (tLinP.fLineAngle < 90.0) tLinP.fLineAngle += 0.01;
+                    if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    break;
                   default:
                     break;
                 }
@@ -1011,7 +1033,9 @@ void _encoder_handle()
                     if (tCirP.fRadius < 400.0) tCirP.fRadius += 0.01;
                     break;
                   case 2: // Angle offset
-                    if (tCirP.fAngleOffset < 500.0) tCirP.fAngleOffset += 0.01;
+                    if (tCirP.fAngleOffset < 120.0) tCirP.fAngleOffset += 0.01;
+                    if (tCirP.fAngleOffset < 0.011) tCirP.fAngleOffset = 0.0101;
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1041,7 +1065,7 @@ void _encoder_handle()
                 switch (ucSettingsItem)
                 {
                   case 0:
-                    if (tCoP.fToolDia > 0.1) tCoP.fToolDia -= 0.01 ;
+                    if (tCoP.fToolDia > 0.01) tCoP.fToolDia -= 0.01 ;
                   default:
                     break;
                 }
@@ -1050,10 +1074,15 @@ void _encoder_handle()
                 switch (ucSettingsItem)
                 {
                   case 0: // Length X
-                    if (tLinP.fLengthX > 0.1) tLinP.fLengthX -= 0.01;
+                    if (tLinP.fLengthX > 0.01) tLinP.fLengthX -= 0.01;
                     break;
                   case 2: // Length Y
-                    if (tLinP.fLengthY > 0.1) tLinP.fLengthY -= 0.01;
+                    if (tLinP.fLengthY > 0.01) tLinP.fLengthY -= 0.01;
+                    break;
+                  case 4: // Angle
+                    if (tLinP.fLineAngle > -90.) tLinP.fLineAngle -= 0.01;
+                    if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1063,10 +1092,16 @@ void _encoder_handle()
                 switch (ucSettingsItem)
                 {
                   case 0: // Radius
-                    if (tCirP.fRadius > 0.1) tCirP.fRadius -= 0.01;
+                    if (tCirP.fRadius > 0.01) tCirP.fRadius -= 0.01;
                     break;
                   case 2: // Angle offset
-                    if (tCirP.fAngleOffset > 0.1) tCirP.fAngleOffset -= 0.01;
+                    if (tCirP.fAngleOffset > 0.019){
+                      tCirP.fAngleOffset -= 0.01;
+                    }
+                    else{
+                      tCirP.fAngleOffset = 0;
+                    }
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
                     break;
                   default:
                     break;

@@ -216,12 +216,13 @@ struct linearpattern_t
   float fLengthY; // Length of path X
   float fStartPtX; // Starting point X
   float fStartPtY; // Starting point Y
+  float fLineAngle; // rotate linear Pattern, -90° - +90° ,starting at 0°
   unsigned int uiCurrentX; // current iterations X-Axis
   unsigned int uiCurrentY; // current iterations Y-Axis
   unsigned int uiCurrentNo; // current iteration of cycle
   unsigned char ucState; // Indicates state of function (0=inactive, 1=running, 2=finish)
 };
-linearpattern_t tLinP = {1, 1, 1.0, 1.0, 0.0, 0.0, 0, 0, 0, 0};
+linearpattern_t tLinP = {1, 1, 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, 0, 0};
 
 
 // Function "Pattern circular" struct, containing all needed settings
@@ -237,3 +238,8 @@ struct circularpattern_t
   unsigned char ucState; // Indicates state of function (0=inactive, 1=running, 2=finish)
 };
 circularpattern_t tCirP = {10.0, 4, 0.0, 0.0, 0.0, 0.0, 0, 0};
+
+// convert degree to radiants
+float Deg2Rad(float fAngel){
+	return fAngel / 360 * 2 * M_PI; 
+}
