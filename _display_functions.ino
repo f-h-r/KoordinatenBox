@@ -487,7 +487,7 @@ void _display_setting(unsigned char ucSettingNo)
           lcDispMM.setChar(0, 1, 'e', false);
           lcDispMM.setChar(0, 0, 'l', false);
 
-           _display_float(&lcDispSM, tLinP.fLineAngle, 2);
+          _display_float(&lcDispSM, tLinP.fLineAngle, 2);
           lcDispSM.setRow(0, 6, B01100011); // degree symbol
           break;
         case 5: // run

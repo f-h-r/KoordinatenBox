@@ -238,8 +238,3 @@ struct circularpattern_t
   unsigned char ucState; // Indicates state of function (0=inactive, 1=running, 2=finish)
 };
 circularpattern_t tCirP = {10.0, 4, 0.0, 0.0, 0.0, 0.0, 0, 0};
-
-// convert degree to radiants
-float Deg2Rad(float fAngel){
-	return fAngel / 360 * 2 * M_PI; 
-}

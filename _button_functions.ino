@@ -321,6 +321,11 @@ void _button_handle()
                   *((char*)&tScaleZ.fVirtualZeroVal + t) = EEPROM.read((EE_ZP_TABLE + (12 * ucZeroPoint) + 8) + t);
                 }
                 EEPROM.write(EE_ZEROPOINT, ucZeroPoint);
+
+                // store new virtual zero point value from table also to EEPROM
+                for (unsigned int t = 0; t < sizeof(tScaleX.fVirtualZeroVal); t++) EEPROM.write(EE_VZEROVAL_X + t, *((char*)&tScaleX.fVirtualZeroVal + t));
+                for (unsigned int t = 0; t < sizeof(tScaleY.fVirtualZeroVal); t++) EEPROM.write(EE_VZEROVAL_Y + t, *((char*)&tScaleY.fVirtualZeroVal + t));
+                for (unsigned int t = 0; t < sizeof(tScaleZ.fVirtualZeroVal); t++) EEPROM.write(EE_VZEROVAL_Z + t, *((char*)&tScaleZ.fVirtualZeroVal + t));
                 break;
               case 1: // 1 save zero point
                 // save selected zero point values for all axis
@@ -564,7 +569,7 @@ void _button_handle()
                       {
                         tLinP.uiCurrentY++; // next row
                         tLinP.uiCurrentX = 0; // start column from beginning
-                     }
+                      }
                     }
                     else // last iteration
                     {
@@ -576,9 +581,9 @@ void _button_handle()
                       //tLinP.ucState = 2; // finish linear pattern function
                     }
 
-                    tScaleX.fRelativeVal = tLinP.fStartPtX + (tLinP.uiCurrentX * tLinP.fLengthX * cos(Deg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * cos(Deg2Rad(tLinP.fLineAngle + 90))); // calculate X position
-                    tScaleY.fRelativeVal = tLinP.fStartPtY + (tLinP.uiCurrentX * tLinP.fLengthX * sin(Deg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * sin(Deg2Rad(tLinP.fLineAngle + 90))); // calculate Y position
-                   
+                    tScaleX.fRelativeVal = tLinP.fStartPtX + (tLinP.uiCurrentX * tLinP.fLengthX * cos(_ConvDeg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * cos(_ConvDeg2Rad(tLinP.fLineAngle + 90))); // calculate X position
+                    tScaleY.fRelativeVal = tLinP.fStartPtY + (tLinP.uiCurrentX * tLinP.fLengthX * sin(_ConvDeg2Rad(tLinP.fLineAngle)) + tLinP.uiCurrentY * tLinP.fLengthY * sin(_ConvDeg2Rad(tLinP.fLineAngle + 90))); // calculate Y position
+
                     tLinP.uiCurrentNo++; // set to next iteration
                     break;
                 }
@@ -611,7 +616,7 @@ void _button_handle()
             DBG_P(F("S - tCirP.uiCurrent: ")); DBG_P(tCirP.uiCurrent); DBG_P(F("\n"));
             DBG_P(F("S - tCirP.ucState: ")); DBG_P(tCirP.ucState); DBG_P(F("\n"));
             DBG_P(F("S - tCirP.fCurrentAngle: ")); DBG_P(tCirP.fCurrentAngle); DBG_P(F("\n"));
-            float fTempDeg2Rad = 0.0;
+            float fTemp_ConvDeg2Rad = 0.0;
             switch (tCirP.ucState) // State of function
             {
               case 1: // 1=running
@@ -623,8 +628,8 @@ void _button_handle()
 
                     // first pattern starts at 0° position plus offset
                     tCirP.fCurrentAngle = 0.0;
-                    tCirP.uiCurrent = 0; 
-                    
+                    tCirP.uiCurrent = 0;
+
                     // enable relative mode on X
                     digitalWrite(AXIS_LED_X, HIGH);
                     tScaleX.ucIsRelative = 1;
@@ -644,8 +649,8 @@ void _button_handle()
                       //tCirP.ucState = 2; // finish linear pattern function
                     }
 
-                    tScaleX.fRelativeVal = tCirP.fStartPtX + (tCirP.fRadius * cos(Deg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate X position
-                    tScaleY.fRelativeVal = tCirP.fStartPtY + (tCirP.fRadius * sin(Deg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate Y position
+                    tScaleX.fRelativeVal = tCirP.fStartPtX + (tCirP.fRadius * cos(_ConvDeg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate X position
+                    tScaleY.fRelativeVal = tCirP.fStartPtY + (tCirP.fRadius * sin(_ConvDeg2Rad(tCirP.fCurrentAngle + tCirP.fAngleOffset))); // calculate Y position
 
                     tCirP.uiCurrent++; // set to next iteration
                     break;
@@ -785,7 +790,7 @@ void _encoder_handle()
                   case 4: // Angle
                     if (tLinP.fLineAngle < 89.01) tLinP.fLineAngle += 1;
                     if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
-                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -802,7 +807,7 @@ void _encoder_handle()
                     break;
                   case 2: // Angle offset
                     if (tCirP.fAngleOffset < 119.01) tCirP.fAngleOffset += 1.0;
-                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -924,7 +929,7 @@ void _encoder_handle()
                   case 4: // Angle
                     if (tLinP.fLineAngle > -89.01) tLinP.fLineAngle -= 1;
                     if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
-                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -942,7 +947,7 @@ void _encoder_handle()
                   case 2: // Angle offset
                     if (tCirP.fAngleOffset > 0.99) tCirP.fAngleOffset -= 1.0;
                     if (tCirP.fAngleOffset < 0.01) tCirP.fAngleOffset = 0.0;
-                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1020,7 +1025,7 @@ void _encoder_handle()
                   case 4: // Angle
                     if (tLinP.fLineAngle < 90.0) tLinP.fLineAngle += 0.01;
                     if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
-                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1035,7 +1040,7 @@ void _encoder_handle()
                   case 2: // Angle offset
                     if (tCirP.fAngleOffset < 120.0) tCirP.fAngleOffset += 0.01;
                     if (tCirP.fAngleOffset < 0.011) tCirP.fAngleOffset = 0.0101;
-                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1082,7 +1087,7 @@ void _encoder_handle()
                   case 4: // Angle
                     if (tLinP.fLineAngle > -90.) tLinP.fLineAngle -= 0.01;
                     if (tLinP.fLineAngle > -0.005 && tLinP.fLineAngle < 0.005) tLinP.fLineAngle = 0.0;
-                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tLinP.fLineAngle, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1095,13 +1100,13 @@ void _encoder_handle()
                     if (tCirP.fRadius > 0.01) tCirP.fRadius -= 0.01;
                     break;
                   case 2: // Angle offset
-                    if (tCirP.fAngleOffset > 0.019){
+                    if (tCirP.fAngleOffset > 0.019) {
                       tCirP.fAngleOffset -= 0.01;
                     }
-                    else{
+                    else {
                       tCirP.fAngleOffset = 0;
                     }
-                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset,7); DBG_P(F("\n"));
+                    DBG_P(F("winkel: ")); DBG_P(tCirP.fAngleOffset, 7); DBG_P(F("\n"));
                     break;
                   default:
                     break;
@@ -1128,4 +1133,14 @@ void _encoder_handle()
     aux_pos = 0;
   }
 
+}
+
+/**************************************************************************/
+/*!
+    @brief  Convert degree to radiants
+*/
+/**************************************************************************/
+float _ConvDeg2Rad(float fAngle)
+{
+  return fAngle / 360 * 2 * M_PI;
 }
